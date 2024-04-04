@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonebook Application</title>
+</head>
+<body>
+    <h1>
+        Available choices
+    </h1>
+    <h2>
+        1- add contact <br>
+        2- list contact <br>
+        3- search contact<br>
+        4- modify contact<br>
+        5- delete contact <br>
+    </h2>
+    <div id="output"></div>
+    <div id="input">
+         <input type="text" id="userInput">
+        <button onclick="handleInput()">please select choice from 1-5</button>
+    </div>
+    
+    <script>
+        // Define phonebook application functions
+        var phonebookHead = null;
+
+        function addContact() {
+            var name = prompt("Enter contact name:");
+            var number = prompt("Enter contact number:");
+            var newContact = {
+                name: name,
+                number: number,
+                next: phonebookHead
+            };
+            phonebookHead = newContact;
+        }
+
+        function listContacts() {
+            var currentContact = phonebookHead;
+            var output = "";
+            while (currentContact != null) {
+                output += currentContact.name + ": " + currentContact.number + "<br>";
+                currentContact = currentContact.next;
+            }
+            document.getElementById("output").innerHTML = output;
+        }
+
+        function searchContact() {
+            var name = prompt("Enter contact name to search:");
+            var currentContact = phonebookHead;
+            while (currentContact != null) {
+                if (currentContact.name.includes(name)) {
+                    document.getElementById("output").innerHTML = currentContact.name + ": " + currentContact.number;
+                    return;
+                }
+                currentContact = currentContact.next;
+            }
+            document.getElementById("output").innerHTML = "No contact found with the name '" + name + "'";
+        }
+
+        function modifyContact() {
+            var name = prompt("Enter contact name to modify:");
+            var newNumber = prompt("Enter new contact number:");
+            var currentContact = phonebookHead;
+            while (currentContact != null) {
+                if (currentContact.name === name) {
+                    currentContact.number = newNumber;
+                    return;
+                }
+                currentContact = currentContact.next;
+            }
+            document.getElementById("output").innerHTML = "No contact found with the name '" + name + "'";
+        }
+
+        function deleteContact() {
+            var name = prompt("Enter contact name to delete:");
+            var prevContact = null;
+            var currentContact = phonebookHead;
+            while (currentContact != null) {
+                if (currentContact.name === name) {
+                    if (prevContact != null) {
+                        prevContact.next = currentContact.next;
+                    } else {
+                        phonebookHead = currentContact.next;
+                    }
+                    return;
+                }
+                prevContact = currentContact;
+                currentContact = currentContact.next;
+            }
+            document.getElementById("output").innerHTML = "No contact found with the name '" + name + "'";
+        }
+
+        // Handle user input
+        function handleInput() {
+            var userInput = document.getElementById("userInput").value;
+            switch (parseInt(userInput)) {
+                case 1:
+                    addContact();
+                    break;
+                case 2:
+                    listContacts();
+                    break;
+                case 3:
+                    searchContact();
+                    break;
+                case 4:
+                    modifyContact();
+                    break;
+                case 5:
+                    deleteContact();
+                    break;
+                case 6:
+                    document.getElementById("output").innerHTML = "Exiting...";
+                    break;
+                default:
+                    document.getElementById("output").innerHTML = "Invalid choice. Please enter a number between 1 and 6.";
+            }
+            document.getElementById("userInput").value = ""; // Clear input field after handling
+        }
+    </script>
+</body>
+</html>
